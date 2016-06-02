@@ -13,7 +13,7 @@ RUN apk --no-cache --update add --virtual build-dependencies ca-certificates wge
     cd /usr/local/bin && \
     unzip /nomad_${NOMAD_VERSION}_linux_amd64.zip && \
     apk del build-dependencies && \
-    rm -rfv /nomad* /etc/apk/keys/andyshinn.rsa.pub
+    rm -rfv /nomad* /etc/apk/keys/andyshinn.rsa.pub glibc-2.23-r1.apk
 
 VOLUME ["/data", "/config"]
 
