@@ -14,6 +14,6 @@ RUN apk --no-cache --update add --virtual build-dependencies ca-certificates wge
 
 VOLUME ["/data", "/config"]
 
-ENTRYPOINT ["/usr/local/bin/nomad"]
+ENTRYPOINT ["/usr/local/bin/nomad", "agent"]
 
 CMD ["-config=/config"]
