@@ -1,19 +1,20 @@
-FROM gliderlabs/alpine:3.3
+FROM gliderlabs/alpine:3.4
 
 ENV NOMAD_VERSION=0.3.2 \
-    NOMAD_SHA256=710ff3515bc449bc2a06652464f4af55f1b76f63c77a9048bc30d6fde284b441
+    NOMAD_SHA256=710ff3515bc449bc2a06652464f4af55f1b76f63c77a9048bc30d6fde284b441 \
+    GLIBC_VERSION=2.23-r1
 
-RUN apk --no-cache --update add --virtual build-dependencies ca-certificates wget && \
+RUN apk --no-cache --update add coreutils ca-certificates wget && \
     wget -q -O /etc/apk/keys/andyshinn.rsa.pub https://raw.githubusercontent.com/andyshinn/alpine-pkg-glibc/master/andyshinn.rsa.pub && \
-    wget https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-2.23-r1.apk && \
-    apk add glibc-2.23-r1.apk && \
+    wget https://github.com/andyshinn/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
+    apk add glibc-${GLIBC_VERSION}.apk && \
     wget -O /nomad_${NOMAD_VERSION}_linux_amd64.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip && \
     echo "${NOMAD_SHA256}  nomad_${NOMAD_VERSION}_linux_amd64.zip" > /nomad.sha256 && \
     sha256sum -c /nomad.sha256 && \
     cd /usr/local/bin && \
     unzip /nomad_${NOMAD_VERSION}_linux_amd64.zip && \
-    apk del build-dependencies && \
-    rm -rfv /nomad* /etc/apk/keys/andyshinn.rsa.pub glibc-2.23-r1.apk
+    apk del ca-certificates wget && \
+    rm -rfv /nomad* /etc/apk/keys/andyshinn.rsa.pub /*.apk
 
 VOLUME ["/data", "/config"]
 
