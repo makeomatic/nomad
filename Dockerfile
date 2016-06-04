@@ -13,7 +13,7 @@ RUN apk --no-cache --update add coreutils ca-certificates wget && \
     sha256sum -c /nomad.sha256 && \
     cd /usr/local/bin && \
     unzip /nomad_${NOMAD_VERSION}_linux_amd64.zip && \
-    apk del ca-certificates wget && \
+    apk del wget && \
     rm -rfv /nomad* /etc/apk/keys/andyshinn.rsa.pub /*.apk
 
 VOLUME ["/data", "/config"]
