@@ -1,0 +1,48 @@
+language: bash
+services: docker
+
+env:
+  global:
+    - PROJECT=nomad
+    - NAMESPACE=makeomatic
+    - PUSH_NAMESPACES=stackfeed
+
+install:
+  - git clone https://github.com/docker-library/official-images.git ~/official-images
+
+before_script:
+  # Set container variant name which defines tag name (aka container:version-variant)
+  - "[ ${TRAVIS_BRANCH} == master ] || export variant=${TRAVIS_BRANCH}"
+
+script:
+  - docker build -t container .
+  - ~/official-images/test/run.sh container
+  - |
+    # Fetch versions from label metadata
+    export versions=$(docker inspect -f "{{.Config.Labels.version_tags}}" container | sed -r -e 's/"|\[|\]//g' -e 's/,/ /g')
+
+    # Create tags from the list
+    for version in $versions; do
+      tag=${version}-${variant}
+      tag=${tag%-}
+      docker tag container $NAMESPACE/$PROJECT:${tag}
+    done
+
+    # Tag latest (on master branch)
+    [ ! -z "$variant" ] || docker tag container $NAMESPACE/$PROJECT
+
+after_success:
+  - |
+    # Check if namespace (org or user) is in the push list PUSH_NAMESPACES.
+    echo "${PUSH_NAMESPACES}" | grep -qw "${TRAVIS_REPO_SLUG%/*}"; DEPLOY=$?
+
+    # List of newly created images
+    export images=$(docker images | grep "^$NAMESPACE/$PROJECT" | tr -s '[:space:]' | cut -f1,2 -d' ' | sed 's/ /:/')
+
+    # Push to docker when DEPLOY is true
+    [ $DEPLOY -ne 0 ] && exit 0
+    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    for image in $images; do docker push $image; done
+
+after_script:
+  - docker images
