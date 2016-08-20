@@ -1,0 +1,43 @@
+language: bash
+services: docker
+
+env:
+  global:
+    - PROJECT=nomad
+    - NAMESPACE=makeomatic
+
+install:
+  - git clone https://github.com/docker-library/official-images.git ~/official-images
+
+before_script:
+  # Set container variant name which defines tag name (aka container:version-variant)
+  - "[ ${TRAVIS_BRANCH} == master ] || export variant=${TRAVIS_BRANCH}"
+
+script:
+  - docker build -t container .
+  - ~/official-images/test/run.sh container
+  # Fetch versions from label metadata
+  - export versions=$(docker inspect -f "{{.Config.Labels.version_tags}}" container | sed -r 's/"|\[|\]//g' | sed 's/,/ /g')
+  - |
+      # Create tags from the list
+      for version in $versions; do
+        tag=${version}-${variant}
+        tag=${tag%-}
+        docker tag container $NAMESPACE/$PROJECT:${tag}
+      done
+      # Tag latest (on master branch)
+      [ ! -z "$variant" ] || docker tag container $NAMESPACE/$PROJECT
+
+after_script:
+  - docker images
+
+after_success:
+  - |
+      if [[ "${TRAVIS_REPO_SLUG}" =~ "${NAMESPACE}/" ]]; then
+        docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+        # Get list of newly tagged images and push them
+        updated=$(docker images | grep "^$NAMESPACE/$PROJECT" | tr -s '[:space:]' | cut -f1,2 -d' ' | sed 's/ /:/')
+        for image in $updated; do
+          docker push $image
+        done
+      fi
