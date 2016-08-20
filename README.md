@@ -1,3 +1,5 @@
+[![DockerHub](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/makeomatic/nomad) [![DockerHub](https://img.shields.io/docker/pulls/makeomatic/nomad.svg)](https://img.shields.io/docker/pulls/makeomatic/nomad.svg) [![Build Status](https://travis-ci.org/stackfeed/docker-nomad.svg?branch=master)](https://travis-ci.org/stackfeed/docker-nomad)
+
 # Dockerized nomad distribution
 
 Its essential that glibc wrapper is available over muslc, otherwise nomad will say its not available
