@@ -1,4 +1,4 @@
-[![DockerHub](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/makeomatic/nomad) [![DockerHub](https://img.shields.io/docker/pulls/makeomatic/nomad.svg)](https://img.shields.io/docker/pulls/makeomatic/nomad.svg) [![Build Status](https://travis-ci.org/makeomatic/nomad.svg?branch=master)](https://travis-ci.org/makeomatic/nomad)
+[![Build Status](https://travis-ci.org/makeomatic/nomad.svg?branch=master)](https://travis-ci.org/makeomatic/nomad) [![DockerHub](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/makeomatic/nomad) [![DockerHub](https://img.shields.io/docker/pulls/makeomatic/nomad.svg)](https://hub.docker.com/r/makeomatic/nomad)
 
 # Dockerized nomad distribution
 
