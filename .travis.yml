@@ -5,7 +5,7 @@ env:
   global:
     - PROJECT=nomad
     - NAMESPACE=makeomatic
-    - PUSH_NAMESPACES=stackfeed
+    - PUSH_NAMESPACES=makeomatic
 
 install:
   - git clone https://github.com/docker-library/official-images.git ~/official-images
@@ -20,14 +20,14 @@ script:
 
 after_success:
   - |
-    # Check if namespace (org or user) is in the push list PUSH_NAMESPACES.
-    echo "${PUSH_NAMESPACES}" | grep -qw "${TRAVIS_REPO_SLUG%/*}"; DEPLOY=$?
-
     # List of newly created images
     export images=$(docker images | grep "^$NAMESPACE/$PROJECT" | tr -s '[:space:]' | cut -f1,2 -d' ' | sed 's/ /:/')
 
+    # Check if not PR and namespace (org or user) is in the push list PUSH_NAMESPACES.
+    [ "${TRAVIS_PULL_REQUEST}" = "false" ] && ( echo "${PUSH_NAMESPACES}" | grep -qw "${TRAVIS_REPO_SLUG%/*}" )
+    [ $? -eq 0 ] || exit 0
+
     # Push to docker when DEPLOY is true
-    [ $DEPLOY -ne 0 ] && exit 0
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     for image in $images; do docker push $image; done
 
