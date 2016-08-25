@@ -12,24 +12,11 @@ install:
 
 before_script:
   # Set container variant name which defines tag name (aka container:version-variant)
-  - "[ ${TRAVIS_BRANCH} == master ] || export variant=${TRAVIS_BRANCH}"
+  - "[ ${TRAVIS_BRANCH} == master ] || export VARIANT=${TRAVIS_BRANCH}"
 
 script:
-  - docker build -t container .
-  - ~/official-images/test/run.sh container
-  - |
-    # Fetch versions from label metadata
-    export versions=$(docker inspect -f "{{.Config.Labels.version_tags}}" container | sed -r -e 's/"|\[|\]//g' -e 's/,/ /g')
-
-    # Create tags from the list
-    for version in $versions; do
-      tag=${version}-${variant}
-      tag=${tag%-}
-      docker tag container $NAMESPACE/$PROJECT:${tag}
-    done
-
-    # Tag latest (on master branch)
-    [ ! -z "$variant" ] || docker tag container $NAMESPACE/$PROJECT
+  - .travis/build-image $NAMESPACE/$PROJECT .
+  - ~/official-images/test/run.sh $(docker images -q | head -n1)
 
 after_success:
   - |
