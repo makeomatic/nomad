@@ -8,14 +8,16 @@ env:
     - PUSH_NAMESPACES=makeomatic
 
 install:
+  - curl -sSL https://github.com/stackfeed/ci-scripts/raw/master/install.sh | sh -s
   - git clone https://github.com/docker-library/official-images.git ~/official-images
 
 before_script:
-  # Set container variant name which defines tag name (aka container:version-variant)
-  - "[ ${TRAVIS_BRANCH} == master ] || export VARIANT=${TRAVIS_BRANCH}"
+  - |
+      export PATH=$PATH:~/ci-scripts
+      [ ${TRAVIS_BRANCH} == master ] || export variant=${TRAVIS_BRANCH}
 
 script:
-  - .travis/build-image $NAMESPACE/$PROJECT .
+  - docker-build -v "${variant}" $NAMESPACE/$PROJECT .
   - ~/official-images/test/run.sh $(docker images -q | head -n1)
 
 after_success:
