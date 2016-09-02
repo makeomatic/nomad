@@ -1,11 +1,7 @@
 [![Build Status](https://travis-ci.org/makeomatic/nomad.svg?branch=master)](https://travis-ci.org/makeomatic/nomad) [![DockerHub](https://img.shields.io/badge/docker-available-blue.svg)](https://hub.docker.com/r/makeomatic/nomad) [![DockerHub](https://img.shields.io/docker/pulls/makeomatic/nomad.svg)](https://hub.docker.com/r/makeomatic/nomad)
 
-# Dockerized nomad distribution
+# Nomad container
 
-Its essential that glibc wrapper is available over muslc, otherwise nomad will say its not available
-You can get it at https://github.com/andyshinn/alpine-pkg-glibc
-Note that this repo needs a maintainer
+Provides latest nomad running on alpine + glibc compat. This container allows docker socket and binary pass-through.
 
-## Notes
-
-1. https://github.com/gliderlabs/docker-alpine/issues/97, `coreutils` module is needed for fingerprinting of node in client mode
+Important notice that it's just a up-to-date nomad container, however it doesn't ship any default configuration with it. So to use it you will require to pass configuration volume - `/config` and optional data volume `/data`.
