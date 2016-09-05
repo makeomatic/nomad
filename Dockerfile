@@ -14,9 +14,9 @@ RUN curl -sSL -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VER
 
 VOLUME ["/data", "/config"]
 
-# http server (client+server): 4646
-# rpc (server raft): 4647
-# serf (server gossip): 4648
+# http server: 4646 (applies to server+client)
+# rpc raft: 4647 (applies to server+client)
+# serf gossip: 4648 TCP+UDP (applies to server)
 
 EXPOSE 4646 4647 4648
 
