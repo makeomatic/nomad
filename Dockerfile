@@ -6,7 +6,7 @@ LABEL vendor=makeomatic \
 ENV NOMAD_VERSION=0.5.6 \
     NOMAD_SHA256=3f5210f0bcddf04e2cc04b14a866df1614b71028863fe17bcdc8585488f8cb0c
 
-RUN apk --no-cache --update add curl libtool coreutils
+RUN apk --no-cache --update add curl libtool coreutils tzdata
 
 RUN curl -sSL -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip && \
     echo "${NOMAD_SHA256}  /tmp/nomad.zip" | sha256sum -c - && unzip /tmp/nomad.zip -d /usr/local/bin && \
