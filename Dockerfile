@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-glibc:alpine-3.5_glibc-2.24
 
 LABEL vendor=makeomatic \
-      version_tags="[\"0.5\",\"0.5.6\"]"
+      version_tags="[\"0.5\",\"0.5.6-1\"]"
 
 ENV NOMAD_VERSION=0.5.6 \
     NOMAD_SHA256=3f5210f0bcddf04e2cc04b14a866df1614b71028863fe17bcdc8585488f8cb0c
