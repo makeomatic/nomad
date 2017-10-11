@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-glibc:alpine-3.5_glibc-2.24
+FROM frolvlad/alpine-glibc:alpine-3.6
 
 LABEL vendor=makeomatic \
       version_tags="[\"0.6\",\"0.6.3\"]"
