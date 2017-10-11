@@ -1,10 +1,10 @@
-FROM frolvlad/alpine-glibc:alpine-3.5_glibc-2.24
+FROM frolvlad/alpine-glibc:alpine-3.6
 
 LABEL vendor=makeomatic \
-      version_tags="[\"0.5\",\"0.5.6-1\"]"
+      version_tags="[\"0.6\",\"0.6.3\"]"
 
-ENV NOMAD_VERSION=0.5.6 \
-    NOMAD_SHA256=3f5210f0bcddf04e2cc04b14a866df1614b71028863fe17bcdc8585488f8cb0c
+ENV NOMAD_VERSION=0.6.3 \
+    NOMAD_SHA256=908ee049bda380dc931be2c8dc905e41b58e59f68715dce896d69417381b1f4e
 
 RUN apk --no-cache --update add curl libtool coreutils tzdata
 
